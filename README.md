@@ -1,8 +1,11 @@
 # twitter-data-correct
 
 ## 事前準備
-* Gitをインストール
-* Java1.8をインストール
+
+予め下記をインストールしてください
+
+* Git
+* Java1.8
 
 下記はAmazonLinuxの例
 ```
@@ -42,3 +45,9 @@ private static final int SAVE_FILE_TWEET_COUNT = 10;
 cd twitter-data-correct
 ./start.sh
 ```
+
+現在のTwitterストリームから指定したキーワードを取得し続け、指定した件数になるとS3へCSVファイルをアップロードします。
+
+## 停止方法
+
+Ctrl+c で停止
