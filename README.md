@@ -8,7 +8,7 @@
 ```
 sudo yum -y install git
 sudo yum -y install java-1.8.0-openjdk-devel
-sudo alternatives --config java
+sudo alternatives --config java  # Java1.8を選択
 ```
 
 ## デプロイ
@@ -39,6 +39,6 @@ private static final int SAVE_FILE_TWEET_COUNT = 10;
 ## 実行
 
 ```bash
-cd twitter-data-correct.git
+cd twitter-data-correct
 ./start.sh
 ```
