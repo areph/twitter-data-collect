@@ -1,4 +1,4 @@
-# twitter-data-correct
+# twitter-data-collect
 
 ## 事前準備
 
@@ -19,7 +19,7 @@ sudo alternatives --config java  # Java1.8を選択
 
 対象ソースをcloneします。
 
-`git clone https://github.com/areph/twitter-data-correct.git`
+`git clone https://github.com/areph/twitter-data-collect.git`
 
 
 ## 各種アクセスキー設定
@@ -39,8 +39,8 @@ src/main/resources/search-keyword-settings.csv
 を編集してください。CSV形式となっており、複数行定義することが可能です。
 
 ```
-オリンピック,#オリンピック,#リオ2016,#リオオリンピック
-水泳,体操
+Java,Groovy,Python,#JJUG
+プログラミング,TDD
 ```
 
 特定アカウントのTweetを取得する場合は
@@ -50,7 +50,7 @@ src/main/resources/search-follow-settings.csv
 を編集してください。CSV形式となっており、複数行定義することが可能です。
 
 ```
-339200824,137655947
+525244942,68087504
 ```
 
 なお、検索ワードと特定アカウントのTweetはOR検索となっています。
@@ -58,7 +58,7 @@ src/main/resources/search-follow-settings.csv
 ## 実行
 
 ```bash
-cd twitter-data-correct
+cd twitter-data-collect
 ./start.sh
 ```
 
