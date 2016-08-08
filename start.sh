@@ -1,2 +1,2 @@
-./gradlew run
+./gradlew run &
 
