@@ -13,7 +13,7 @@ public class PropKeyTest {
 
     @Test
     public void loadtest() {
-        SettingProperties sut = new SettingProperties("../../../setting.properties");
+        SettingProperties sut = new SettingProperties("setting.properties");
         assertThat(sut.getProperty(SettingProperties.PropKey.twitter_oauth_consumerKey), is("testconsumerkey"));
         assertThat(sut.getProperty(SettingProperties.PropKey.twitter_oauth_consumerSecret), is("testconsumersecret"));
         assertThat(sut.getProperty(SettingProperties.PropKey.twitter_oauth_accessToken), is("testaccesstoken"));

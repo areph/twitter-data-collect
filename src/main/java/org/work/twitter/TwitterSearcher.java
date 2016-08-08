@@ -3,23 +3,21 @@ package org.work.twitter;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.work.twitter.SettingProperties.*;
 
 public class TwitterSearcher {
 
-    // 取得したいキーワードを指定
-    private static final String[] TRACK = new String[]{ "オリンピック", "#オリンピック", "#リオ2016", "#リオオリンピック" };
-    // 取得したいアカウントのTwetterIDを指定
-    private static final long[] FOLLOW = new long[]{ 53929093 };
-    // ファイルに保存するツイート数
-    private static final int SAVE_FILE_TWEET_COUNT = 10;
-
     private final SettingProperties properties;
     private final AWSS3 s3;
     private final CSVStatusListener listener;
     private final ConfigurationBuilder cb = new ConfigurationBuilder();
+    private static final String SEARCH_KEYWORD_FILE = "search-keyword-settings.csv";
+    private static final String SEARCH_FOLLOW_FILE = "search-follow-settings.csv";
 
     public TwitterSearcher(SettingProperties properties) {
         this.properties = properties;
@@ -27,7 +25,7 @@ public class TwitterSearcher {
                 properties.getProperty(PropKey.s3_key),
                 properties.getProperty(PropKey.s3_secret_key)
         );
-        listener = new CSVStatusListener(s3, SAVE_FILE_TWEET_COUNT);
+        listener = new CSVStatusListener(s3, Integer.valueOf(properties.getProperty(PropKey.save_file_tweet_count)));
         cb.setDebugEnabled(true)
                 .setOAuthConsumerKey(properties.getProperty(PropKey.twitter_oauth_consumerKey))
                 .setOAuthConsumerSecret(properties.getProperty(PropKey.twitter_oauth_consumerSecret))
@@ -42,33 +40,38 @@ public class TwitterSearcher {
         twitterStream.addListener(listener);
 
         FilterQuery query = new FilterQuery();
-        query.track(TRACK);
-        query.follow(FOLLOW);
+        query.track(getTrack());
+        query.follow(getFollow());
         query.language(new String[]{ "ja" });
 
         // 検索実行
         twitterStream.filter(query);
     }
 
-    // TODO 外部から読み込む場合に使用する
-    private long[] getFOLLOW() {
-        ArrayList<String> follow = new ArrayList<>();
-
-        follow.add("53929093");
+    public long[] getFollow() {
+        List<String> follow = readCSVFile(SEARCH_FOLLOW_FILE);
 
         return follow.stream().mapToLong(s -> Long.valueOf(s)).toArray();
     }
 
-    // TODO 外部から読み込む場合に使用する
-    private String[] getTrack() {
-        ArrayList<String> track = new ArrayList<>();
-
-        track.add("オリンピック");
-        track.add("#オリンピック");
-        track.add("#リオ2016");
-        track.add("#リオオリンピック");
+    public String[] getTrack() {
+        List<String> track = readCSVFile(SEARCH_KEYWORD_FILE);
 
         return track.toArray(new String[track.size()]);
+    }
+
+    public List<String> readCSVFile(String fileName) {
+        ArrayList<String> data = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream(fileName)))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Arrays.stream(line.split(",")).forEach(s -> data.add(s));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 
     public void save() {

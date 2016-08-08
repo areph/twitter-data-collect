@@ -17,6 +17,7 @@ public class SettingProperties {
         s3_bucketName,
         s3_key,
         s3_secret_key,
+        save_file_tweet_count,
     }
 
     public SettingProperties(String fileName) {
@@ -28,7 +29,8 @@ public class SettingProperties {
     }
     public void load(String fileName, String encode) {
         properties = new Properties();
-        try (InputStream in = getClass().getResourceAsStream(fileName)) {
+
+        try (InputStream in = ClassLoader.getSystemResourceAsStream(fileName)) {
             Reader reader = encode != null ? new InputStreamReader(in, encode) : new InputStreamReader(in);
             properties.load(reader);
         } catch (IOException e) {
