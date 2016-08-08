@@ -35,6 +35,7 @@ public class CSVStatusListener implements StatusListener {
 
         String csv = String.join(",",
                 ZonedDateTime.ofInstant(status.getCreatedAt().toInstant(), ZoneId.of("Asia/Tokyo")).toString(), // 日付
+                "https://twitter.com/" + status.getUser().getScreenName() + "/status/" + status.getId(), // TweetURL
                 "@" + status.getUser().getScreenName(),  // アカウント名
                 pt.matcher(status.getText()).replaceAll(" ")  // つぶやき
         );
