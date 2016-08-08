@@ -33,7 +33,7 @@ public class TwitterSearcher {
                 .setOAuthAccessTokenSecret(properties.getProperty(PropKey.twitter_oauth_accessTokenSecret));
     }
 
-    public void run() {
+    public void run() throws IOException {
 
         TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
 
@@ -48,19 +48,19 @@ public class TwitterSearcher {
         twitterStream.filter(query);
     }
 
-    public long[] getFollow() {
+    public long[] getFollow() throws IOException {
         List<String> follow = readCSVFile(SEARCH_FOLLOW_FILE);
 
         return follow.stream().mapToLong(s -> Long.valueOf(s)).toArray();
     }
 
-    public String[] getTrack() {
+    public String[] getTrack() throws IOException {
         List<String> track = readCSVFile(SEARCH_KEYWORD_FILE);
 
         return track.toArray(new String[track.size()]);
     }
 
-    public List<String> readCSVFile(String fileName) {
+    public List<String> readCSVFile(String fileName) throws IOException {
         ArrayList<String> data = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream(fileName)))) {
@@ -68,8 +68,6 @@ public class TwitterSearcher {
             while ((line = reader.readLine()) != null) {
                 Arrays.stream(line.split(",")).forEach(s -> data.add(s));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return data;
     }

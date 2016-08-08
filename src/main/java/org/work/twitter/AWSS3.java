@@ -35,8 +35,7 @@ public class AWSS3 {
         String uploadFileName = ZonedDateTime.now(ZoneId.of("Asia/Tokyo")).format(formatter);
 
         AmazonS3 s3client = new AmazonS3Client(new BasicAWSCredentials(s3key, s3secreteKey));
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             for (String csv : csvList) {
                 baos.write(csv.getBytes("UTF8"));
                 baos.write(13);

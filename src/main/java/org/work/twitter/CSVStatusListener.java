@@ -72,6 +72,6 @@ public class CSVStatusListener implements StatusListener {
 
     @Override
     public void onException(Exception ex) {
-        throw new RuntimeException(ex);
+        ex.printStackTrace();
     }
 }
