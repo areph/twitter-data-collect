@@ -65,5 +65,6 @@ cd twitter-data-correct
 現在のTwitterストリームから指定したキーワードを取得し続け、指定した件数になるとS3へCSVファイルをアップロードし続けます。
 
 ## 停止方法
-
-Ctrl+c で停止します。
+```bash
+./stop.sh
+```
