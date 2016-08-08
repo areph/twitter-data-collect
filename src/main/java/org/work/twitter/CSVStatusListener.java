@@ -21,12 +21,9 @@ public class CSVStatusListener implements StatusListener {
     private final int fileSaveTweetCount;
     private final List<String> csvList = new ArrayList<>();
 
-    public CSVStatusListener(SettingProperties properties, int fileSaveTweetCount) {
+    public CSVStatusListener(AWSS3 s3, int fileSaveTweetCount) {
+        this.s3 = s3;
         this.fileSaveTweetCount = fileSaveTweetCount;
-        s3 = new AWSS3(properties.getProperty(PropKey.s3_bucketName),
-                properties.getProperty(PropKey.s3_key),
-                properties.getProperty(PropKey.s3_secret_key)
-        );
     }
 
     @Override
@@ -47,7 +44,10 @@ public class CSVStatusListener implements StatusListener {
             csvList.clear();
             s3.upload(copyCsvList);
         }
+    }
 
+    public List<String> getCsvList() {
+        return csvList;
     }
 
     @Override
